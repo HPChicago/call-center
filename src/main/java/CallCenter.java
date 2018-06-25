@@ -25,8 +25,8 @@ public class CallCenter {
         List<Representative> representatives = new ArrayList<>();
         Representative employee1 = new Representative(Representative.Rank.EMPLOYEE, 3);
         representatives.add(employee1);
-        for(int r = 0; r < numberOfRepresentatives - 2; r++){
-            Representative employee = new Representative(Representative.Rank.EMPLOYEE, r + 3);
+        for(int r = 0; r < numberOfRepresentatives - 1; r++){
+            Representative employee = new Representative(Representative.Rank.EMPLOYEE, r + 4);
             representatives.add(employee);
         }
         Representative supervisor = new Representative(Representative.Rank.SUPERVISOR, 2);
