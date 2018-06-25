@@ -18,6 +18,7 @@ class EasyCall extends CallHandler implements Runnable{
         logger.info("Rep: " + representative.getEmployeeId() + " Rank: "+ representative.getCurrentRank() + "  is on a call# " + call.getCallId());
         try {
             Thread.sleep(10000);
+            logger.info("Rep:" + representative.getEmployeeId() + " hanging up on a call " + call.getCallId());
             representative.setFree();
 
         } catch (InterruptedException e) {

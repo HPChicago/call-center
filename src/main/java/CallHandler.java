@@ -39,7 +39,7 @@ public class CallHandler implements Runnable{
             logger.debug("Available employees : " + availableEmployees);
             Optional<Representative> rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.EMPLOYEE.toString()).findAny();
                 if(rep.isPresent()){
-                    System.out.println("Connecting Call# " + receivedCalls.peek().getCallId() + " with the representative of rank: " + rep.get().getCurrentRank() + " Id:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
+                  logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with the representative of rank: " + rep.get().getCurrentRank() + " Id:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
                     rep.get().setBusy();
                     EasyCall easyCall = new EasyCall(rep.get(), receivedCalls.pollFirst());
                     new Thread(easyCall).start();
@@ -47,10 +47,10 @@ public class CallHandler implements Runnable{
                         else{ break; }
                 }
                 else{
-                    System.out.println("No Employees available...Looking for Supervisor");
+                    logger.debug("No Employees available...Looking for Supervisor");
                     rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.SUPERVISOR.toString()).findAny();
                     if(rep.isPresent()){
-                        System.out.println("Supervisor found");
+                        logger.debug("Supervisor found");
                         rep.get().setBusy();
                         EasyCall easyCall = new EasyCall(rep.get(), receivedCalls.pollFirst());
                         new Thread(easyCall).start();
@@ -58,10 +58,10 @@ public class CallHandler implements Runnable{
                         else{ break; }
                     }
                     else{
-                        System.out.println("No Supervisor available...Looking for Supervisor");
+                        logger.debug("No Supervisor available...Looking for Supervisor");
                         rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.MANAGER.toString()).findAny();
                         if (rep.isPresent()){
-                            System.out.println("Manager found");
+                            logger.debug("Manager found");
                             rep.get().setBusy();
                             EasyCall easyCall = new EasyCall(rep.get(), receivedCalls.pollFirst());
                             new Thread(easyCall).start();
@@ -69,7 +69,7 @@ public class CallHandler implements Runnable{
                             else{ break; }
                         }
                         else{
-                            System.out.println("Everyone is busy");
+                            logger.info("Please wait for the next available representative...");
                             Thread.sleep(10000);
                             findCallHandler();
                         }
@@ -109,8 +109,6 @@ public class CallHandler implements Runnable{
 //                }
 //            }
 //        }
-
-        logger.info("AFTER" + repsOnDuty.toString());
         }
 
 
