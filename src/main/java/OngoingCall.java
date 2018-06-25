@@ -1,22 +1,32 @@
+/**
+ * OngoingCall Class controls flow of the current call.
+ * @author Gregory Povorozniuk
+ */
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Random;
 
 class OngoingCall extends CallHandler implements Runnable{
 
     private static final Logger logger = LoggerFactory.getLogger(OngoingCall.class);
 
+    /** FIELDS */
+
     volatile Representative representative;
     volatile Call call;
     private static final int MINUTE = 60000;
     private int callLength;
+
+    /** CONSTRUCTORS */
 
     public OngoingCall(Representative representative, Call call) {
         this.representative = representative;
         this.call = call;
         this.setLengthOfTheCall();
     }
+
+    /** SETTERS */
 
     private void setLengthOfTheCall(){
         Random rand = new Random();
@@ -40,6 +50,8 @@ class OngoingCall extends CallHandler implements Runnable{
                 this.callLength = rand.nextInt(MINUTE + 10000);
         }
     }
+
+    /** METHODS */
 
     @Override
     public void run() {

@@ -6,20 +6,26 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public class CallCenter {
+
     private static final Logger logger = LoggerFactory.getLogger(CallCenter.class);
+
+    /** FIELDS */
+
     private int numberOfCalls;
     private int numberOfRepresentatives;
     private List<Representative>repsOnDuty;
     private ConcurrentLinkedDeque<Call> receivedCalls;
+
+    /** CONSTRUCTORS */
 
     public CallCenter(int numberOfCalls, int numberOfRepresentatives) {
         this.numberOfCalls = numberOfCalls;
         this.numberOfRepresentatives = numberOfRepresentatives;
         this.repsOnDuty(numberOfRepresentatives);
         this.receivedCalls(numberOfCalls);
-
-
     }
+
+    /** GETTERS & SETTERS */
 
     public List<Representative>repsOnDuty(int numberOfRepresentatives){
         List<Representative> representatives = new ArrayList<>();
@@ -48,6 +54,8 @@ public class CallCenter {
         logger.info(calls.toString());
         return calls;
     }
+
+    /** METHODS */
 
     public void processCalls() {
         CallHandler callHandler = new CallHandler(receivedCalls, repsOnDuty);

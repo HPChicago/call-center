@@ -1,7 +1,12 @@
 public class Representative {
+
+    /** FIELDS */
+
     private boolean isAvailable;
     private int employeeId;
     private String currentRank;
+
+    /** CONSTRUCTORS */
 
     public Representative(Representative.Rank rank, int employeeId) {
         this.currentRank = rank.toString();
@@ -9,29 +14,25 @@ public class Representative {
         this.setFree();
     }
 
-    public String getCurrentRank() {
-        return currentRank;
-    }
+    /** GETTERS & SETTERS */
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
+    public String getCurrentRank() { return currentRank; }
 
-    public void setFree(){
-        this.isAvailable = true;
-    }
+    public boolean isAvailable() { return isAvailable; }
+
+    public void setFree(){ this.isAvailable = true; }
 
     public void setBusy(){
         this.isAvailable = false;
     }
 
-    public int getEmployeeId() {
-        return employeeId;
-    }
+    public int getEmployeeId() { return employeeId; }
 
     public void setCanHandle(boolean canHandle) {
         this.isAvailable = canHandle;
     }
+
+    /** METHODS */
 
     @Override
     public String toString() {
@@ -41,6 +42,8 @@ public class Representative {
                 ", currentRank='" + currentRank + '\'' +
                 '}';
     }
+
+    /** ENUMS */
 
     public enum Rank {
         EMPLOYEE,
