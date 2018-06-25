@@ -31,6 +31,10 @@ public class Call {
         this.callId = String.valueOf(rand.nextInt(99999) + 1111);
     }
 
+    public int getCallComplexity() {
+        return callComplexity;
+    }
+
     public String getCallId() {
         return callId;
     }
