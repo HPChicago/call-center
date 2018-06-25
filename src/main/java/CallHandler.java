@@ -10,21 +10,26 @@ import java.util.stream.Collectors;
 
 public class CallHandler implements Runnable{
 
-    Object key = new Object();
+    //Object key = new Object();
 
     private static final Logger logger = LoggerFactory.getLogger(CallHandler.class);
+
+    /** FIELDS */
 
     private volatile List<Representative> repsOnDuty;
     private volatile ConcurrentLinkedDeque<Call> receivedCalls;
 
+    /** CONSTRUCTORS */
+
     public CallHandler(ConcurrentLinkedDeque<Call> receivedCalls, List<Representative>repsOnDuty ) {
         this.repsOnDuty = repsOnDuty;
         this.receivedCalls = receivedCalls;
-
     }
 
-    public CallHandler() {
-    }
+    public CallHandler(){}
+
+    /** METHODS */
+
     @Override
     public void run() {
         try {
@@ -80,45 +85,7 @@ public class CallHandler implements Runnable{
                 }
            //System.out.println(receivedCalls.pollFirst());
         }
-
-
-
-//        for(int i = 0; i < 4; i++){
-//            for (Representative repOnDuty : repsOnDuty){
-
-//                if(repOnDuty.getCurrentRank() == Representative.Rank.EMPLOYEE.toString() ){
-//                    if(repOnDuty.isAvailable()) {
-//                        repOnDuty.setBusy();
-//                        if(receivedCalls.peekFirst().getCallComplexity()>3){
-//                            HardCall hardCall = new HardCall(repOnDuty, receivedCalls.pollFirst());
-//                            new Thread(hardCall).start();
-//                            if(receivedCalls.size()!=0){
-//                                findCallHandler();
-//                            }
-//                            else{
-//                                break;
-//                            }
-//                        }
-//                        else{
-//                            OngoingCall easyCall = new OngoingCall(repOnDuty, receivedCalls.pollFirst());
-//                            new Thread(easyCall).start();
-//                            if(receivedCalls.size()!=0){
-//                                findCallHandler();
-//                            }
-//                            else{
-//                                break;
-//                            }
-//                        }
-//
-//
-//                    }
-//                }
-//            }
-//        }
-        }
-
-
-
+    }
 //    public void handleCall(Representative representative, Call call) throws InterruptedException {
 //        synchronized (key){
 //            System.out.println("1" + repsOnDuty);
@@ -134,7 +101,4 @@ public class CallHandler implements Runnable{
 //        }
 
 //    }
-
-
-
 }

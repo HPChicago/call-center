@@ -3,13 +3,20 @@ import java.util.List;
 import java.util.Random;
 
 public class Call {
+
+    /** FIELDS */
+
     private String callId;
     private int callComplexity;
+
+    /** CONSTRUCTORS */
 
     public Call(){
         this.setCallId();
         this.setCallComplexity();
     }
+
+    /** GETTERS & SETTERS */
 
     private void setCallComplexity(){
         List<Integer> fibonacciSequence = new ArrayList<>();
@@ -38,6 +45,8 @@ public class Call {
     public String getCallId() {
         return callId;
     }
+
+    /** METHODS */
 
     @Override
     public String toString() {
