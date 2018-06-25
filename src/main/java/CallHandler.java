@@ -1,8 +1,9 @@
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.EmptyStackException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
@@ -16,10 +17,10 @@ public class CallHandler implements Runnable{
     private volatile List<Representative> repsOnDuty;
     private volatile ConcurrentLinkedDeque<Call> receivedCalls;
 
-
     public CallHandler(ConcurrentLinkedDeque<Call> receivedCalls, List<Representative>repsOnDuty ) {
         this.repsOnDuty = repsOnDuty;
         this.receivedCalls = receivedCalls;
+
     }
 
     public CallHandler() {
@@ -39,10 +40,10 @@ public class CallHandler implements Runnable{
             logger.debug("Available employees : " + availableEmployees);
             Optional<Representative> rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.EMPLOYEE.toString()).findAny();
                 if(rep.isPresent()){
-                  logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with the representative of rank: " + rep.get().getCurrentRank() + " Id:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
+                  logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with: " + rep.get().getCurrentRank() + " ID:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
                     rep.get().setBusy();
-                    EasyCall easyCall = new EasyCall(rep.get(), receivedCalls.pollFirst());
-                    new Thread(easyCall).start();
+                    OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst());
+                    new Thread(ongoingCall).start();
                         if(receivedCalls.size()!=0){ findCallHandler(); }
                         else{ break; }
                 }
@@ -50,10 +51,11 @@ public class CallHandler implements Runnable{
                     logger.debug("No Employees available...Looking for Supervisor");
                     rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.SUPERVISOR.toString()).findAny();
                     if(rep.isPresent()){
+                        logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with: " + rep.get().getCurrentRank() + " ID:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
                         logger.debug("Supervisor found");
                         rep.get().setBusy();
-                        EasyCall easyCall = new EasyCall(rep.get(), receivedCalls.pollFirst());
-                        new Thread(easyCall).start();
+                        OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst());
+                        new Thread(ongoingCall).start();
                         if(receivedCalls.size()!=0){ findCallHandler(); }
                         else{ break; }
                     }
@@ -61,15 +63,16 @@ public class CallHandler implements Runnable{
                         logger.debug("No Supervisor available...Looking for Supervisor");
                         rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.MANAGER.toString()).findAny();
                         if (rep.isPresent()){
+                            logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with: " + rep.get().getCurrentRank() + " ID:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
                             logger.debug("Manager found");
                             rep.get().setBusy();
-                            EasyCall easyCall = new EasyCall(rep.get(), receivedCalls.pollFirst());
-                            new Thread(easyCall).start();
+                            OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst());
+                            new Thread(ongoingCall).start();
                             if(receivedCalls.size()!=0){ findCallHandler(); }
                             else{ break; }
                         }
                         else{
-                            logger.info("Please wait for the next available representative...");
+                            //logger.info("Please wait for the next available representative...");
                             Thread.sleep(10000);
                             findCallHandler();
                         }
@@ -77,6 +80,9 @@ public class CallHandler implements Runnable{
                 }
            //System.out.println(receivedCalls.pollFirst());
         }
+
+
+
 //        for(int i = 0; i < 4; i++){
 //            for (Representative repOnDuty : repsOnDuty){
 
@@ -94,7 +100,7 @@ public class CallHandler implements Runnable{
 //                            }
 //                        }
 //                        else{
-//                            EasyCall easyCall = new EasyCall(repOnDuty, receivedCalls.pollFirst());
+//                            OngoingCall easyCall = new OngoingCall(repOnDuty, receivedCalls.pollFirst());
 //                            new Thread(easyCall).start();
 //                            if(receivedCalls.size()!=0){
 //                                findCallHandler();

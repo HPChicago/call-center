@@ -33,8 +33,6 @@ public class Representative {
         this.isAvailable = canHandle;
     }
 
-
-
     @Override
     public String toString() {
         return "Representative{" +
