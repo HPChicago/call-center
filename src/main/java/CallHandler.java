@@ -17,7 +17,7 @@ public class CallHandler implements Runnable{
     /** FIELDS */
 
     private volatile List<Representative> repsOnDuty;
-    private volatile ConcurrentLinkedDeque<Call> receivedCalls;
+    public volatile ConcurrentLinkedDeque<Call> receivedCalls;
 
     /** CONSTRUCTORS */
 
@@ -44,10 +44,12 @@ public class CallHandler implements Runnable{
             List<Representative> availableEmployees = repsOnDuty.stream().filter(representative -> representative.isAvailable() == true).collect(Collectors.toList());
             logger.debug("Available employees : " + availableEmployees);
             Optional<Representative> rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.EMPLOYEE.toString()).findAny();
-                if(rep.isPresent()){
+                if(rep.isPresent() && receivedCalls.peekFirst().getCallLevel() != 3 && receivedCalls.peekFirst().getCallLevel() != 2){
                   logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with: " + rep.get().getCurrentRank() + " ID:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
                     rep.get().setBusy();
-                    OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst());
+                    //System.out.println("2" + receivedCalls.peek().getCallId() + " < callId - handled? > " +  receivedCalls.peek().isHandled());
+                    //System.out.println("My thread is + " + Thread.currentThread().getName());
+                    OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst(), receivedCalls);
                     new Thread(ongoingCall).start();
                         if(receivedCalls.size()!=0){ findCallHandler(); }
                         else{ break; }
@@ -55,11 +57,11 @@ public class CallHandler implements Runnable{
                 else{
                     logger.debug("No Employees available...Looking for Supervisor");
                     rep = availableEmployees.stream().filter(representative -> representative.getCurrentRank() == Representative.Rank.SUPERVISOR.toString()).findAny();
-                    if(rep.isPresent()){
+                    if(rep.isPresent() && receivedCalls.peekFirst().getCallLevel() != 3){
                         logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with: " + rep.get().getCurrentRank() + " ID:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
                         logger.debug("Supervisor found");
                         rep.get().setBusy();
-                        OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst());
+                        OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst(), receivedCalls);
                         new Thread(ongoingCall).start();
                         if(receivedCalls.size()!=0){ findCallHandler(); }
                         else{ break; }
@@ -71,7 +73,7 @@ public class CallHandler implements Runnable{
                             logger.info("Connecting Call# " + receivedCalls.peek().getCallId() + " with: " + rep.get().getCurrentRank() + " ID:" + rep.get().getEmployeeId() + " Complexity of the problem is " + receivedCalls.peek().getCallComplexity() + " points");
                             logger.debug("Manager found");
                             rep.get().setBusy();
-                            OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst());
+                            OngoingCall ongoingCall = new OngoingCall(rep.get(), receivedCalls.pollFirst(), receivedCalls);
                             new Thread(ongoingCall).start();
                             if(receivedCalls.size()!=0){ findCallHandler(); }
                             else{ break; }

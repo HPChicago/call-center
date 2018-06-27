@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Representative {
 
     /** FIELDS */
@@ -5,6 +7,7 @@ public class Representative {
     private boolean isAvailable;
     private int employeeId;
     private String currentRank;
+    private int problemSolvingSkills;
 
     /** CONSTRUCTORS */
 
@@ -12,6 +15,7 @@ public class Representative {
         this.currentRank = rank.toString();
         this.employeeId = employeeId;
         this.setFree();
+        this.setProblemSolvingSklls(currentRank);
     }
 
     /** GETTERS & SETTERS */
@@ -32,14 +36,28 @@ public class Representative {
         this.isAvailable = canHandle;
     }
 
+    public void setProblemSolvingSklls(String rank){
+        Random random = new Random();
+        if(currentRank == Rank.EMPLOYEE.toString()){
+            this.problemSolvingSkills = (random.nextInt(92) + 85);
+        }
+        else if(currentRank == Rank.SUPERVISOR.toString()){
+            this.problemSolvingSkills = (random.nextInt(97) + 92);
+        }
+        else if(currentRank == Rank.MANAGER.toString()){
+            this.problemSolvingSkills = 100;
+        }
+    }
+
     /** METHODS */
 
     @Override
     public String toString() {
         return "Representative{" +
                 "isAvailable=" + isAvailable +
-                ", employeeId='" + employeeId + '\'' +
+                ", employeeId=" + employeeId +
                 ", currentRank='" + currentRank + '\'' +
+                ", problemSolvingSkills=" + problemSolvingSkills +
                 '}';
     }
 

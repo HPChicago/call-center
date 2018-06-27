@@ -8,6 +8,8 @@ public class Call {
 
     private String callId;
     private int callComplexity;
+    private boolean isHandled;
+    private int callLevel = 1;
 
     /** CONSTRUCTORS */
 
@@ -46,6 +48,28 @@ public class Call {
         return callId;
     }
 
+    public boolean isHandled() { return isHandled; }
+
+    public void setHandled(boolean handled) { isHandled = handled; }
+
+    public int getCallLevel() { return callLevel; }
+
+    public void elevateCallLevel() {
+        this.callLevel = callLevel + 1;
+    }
+
+    public String callElevatedTo(){
+        if(callLevel == 2){
+            return Representative.Rank.SUPERVISOR.toString();
+        }
+        if (callLevel == 3){
+            return Representative.Rank.MANAGER.toString();
+        }
+        else{
+            return "Something else";
+        }
+    }
+
     /** METHODS */
 
     @Override
@@ -53,6 +77,7 @@ public class Call {
         return "Call{" +
                 "callId='" + callId + '\'' +
                 ", callComplexity=" + callComplexity +
+                ", isHandled=" + isHandled +
                 '}';
     }
 }
