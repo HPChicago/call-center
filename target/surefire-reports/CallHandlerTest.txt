@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: CallHandlerTest
 -------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 70.144 sec
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 72.637 sec
