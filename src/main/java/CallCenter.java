@@ -11,28 +11,38 @@ public class CallCenter {
 
     /** FIELDS */
 
-    private int numberOfCalls;
-    private int numberOfRepresentatives;
-    private List<Representative>repsOnDuty;
+    private List<Representative> repsOnDuty;
     private ConcurrentLinkedDeque<Call> receivedCalls;
 
     /** CONSTRUCTORS */
 
-    public CallCenter(int numberOfCalls, int numberOfRepresentatives) {
-        this.numberOfCalls = numberOfCalls;
-        this.numberOfRepresentatives = numberOfRepresentatives;
-        this.repsOnDuty(numberOfRepresentatives);
-        this.receivedCalls(numberOfCalls);
+    public CallCenter(int numberOfCalls, int numberOfEmployees) {
+        this.setNumberOfEmployeesOnDuty(numberOfEmployees);
+        this.setNumberOfCalls(numberOfCalls);
+    }
+
+    public CallCenter(){};
+
+    public void setNumberOfCalls(int numberOfCalls) {
+        if(numberOfCalls < 1){
+            throw new IllegalArgumentException("We are going to need more calls than that to get busy :)");
+        }
+        receivedCalls(numberOfCalls);
+    }
+
+    public void setNumberOfEmployeesOnDuty(int numberOfEmployeesOnDuty){
+        if(numberOfEmployeesOnDuty < 1){
+            throw new IllegalArgumentException("Need to hire at least 1 employee. Supervisor and a manager won't hold the fort down for too long...");
+        }
+        this.repsOnDuty(numberOfEmployeesOnDuty);
     }
 
     /** GETTERS & SETTERS */
 
-    public List<Representative>repsOnDuty(int numberOfRepresentatives){
+    public List<Representative> repsOnDuty(int numberOfRepresentatives){
         List<Representative> representatives = new ArrayList<>();
-        Representative employee1 = new Representative(Representative.Rank.EMPLOYEE, 3);
-        representatives.add(employee1);
-        for(int r = 1; r < numberOfRepresentatives; r++){
-            Representative employee = new Representative(Representative.Rank.EMPLOYEE, r + 3);
+        for(int r = 1; r <= numberOfRepresentatives; r++){
+            Representative employee = new Representative(Representative.Rank.EMPLOYEE, r + 2);
             representatives.add(employee);
         }
         Representative supervisor = new Representative(Representative.Rank.SUPERVISOR, 2);
@@ -59,7 +69,9 @@ public class CallCenter {
 
     public void processCalls() {
         CallHandler callHandler = new CallHandler(receivedCalls, repsOnDuty);
-        new Thread(callHandler).start();
+        Thread t1 = new Thread(callHandler);
+        t1.setDaemon(false);
+        t1.start();
 
     }
 }

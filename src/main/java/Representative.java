@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Representative {
 
     /** FIELDS */
@@ -5,6 +7,8 @@ public class Representative {
     private boolean isAvailable;
     private int employeeId;
     private String currentRank;
+    private int problemSolvingSkills;
+    private int countOfHandledCalls;
 
     /** CONSTRUCTORS */
 
@@ -12,6 +16,7 @@ public class Representative {
         this.currentRank = rank.toString();
         this.employeeId = employeeId;
         this.setFree();
+        this.setProblemSolvingSklls(currentRank);
     }
 
     /** GETTERS & SETTERS */
@@ -22,14 +27,40 @@ public class Representative {
 
     public void setFree(){ this.isAvailable = true; }
 
-    public void setBusy(){
-        this.isAvailable = false;
-    }
+    public void setBusy(){ this.isAvailable = false; }
 
     public int getEmployeeId() { return employeeId; }
 
     public void setCanHandle(boolean canHandle) {
         this.isAvailable = canHandle;
+    }
+
+    public int getCountOfHandledCalls() { return countOfHandledCalls; }
+
+    public void increaseCountOfHandledCalls() { this.countOfHandledCalls = countOfHandledCalls + 1; }
+
+    public void setProblemSolvingSklls(String rank){
+        if(currentRank == Rank.EMPLOYEE.toString()){
+            this.problemSolvingSkills = generateRandomNumber(85, 95);
+        }
+        else if(currentRank == Rank.SUPERVISOR.toString()){
+            this.problemSolvingSkills = generateRandomNumber(93, 98);
+        }
+        else if(currentRank == Rank.MANAGER.toString()){
+            this.problemSolvingSkills = 100;
+        }
+    }
+    public void setProblemSolvingSklls(int problemSolvingSkills) {
+        this.problemSolvingSkills = problemSolvingSkills;
+    }
+
+    public int getProblemSolvingSkills() {
+        return problemSolvingSkills;
+    }
+
+    public static int generateRandomNumber (int min, int max) {
+        Random random = new Random();
+        return random.nextInt((max - min) + 1) + min;
     }
 
     /** METHODS */
@@ -38,8 +69,9 @@ public class Representative {
     public String toString() {
         return "Representative{" +
                 "isAvailable=" + isAvailable +
-                ", employeeId='" + employeeId + '\'' +
+                ", employeeId=" + employeeId +
                 ", currentRank='" + currentRank + '\'' +
+                ", problemSolvingSkills=" + problemSolvingSkills +
                 '}';
     }
 
