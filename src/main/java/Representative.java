@@ -26,9 +26,7 @@ public class Representative {
 
     public void setFree(){ this.isAvailable = true; }
 
-    public void setBusy(){
-        this.isAvailable = false;
-    }
+    public void setBusy(){ this.isAvailable = false; }
 
     public int getEmployeeId() { return employeeId; }
 
@@ -37,16 +35,24 @@ public class Representative {
     }
 
     public void setProblemSolvingSklls(String rank){
-        Random random = new Random();
         if(currentRank == Rank.EMPLOYEE.toString()){
-            this.problemSolvingSkills = (random.nextInt(92) + 85);
+            this.problemSolvingSkills = generateRandomNumber(85, 95);
         }
         else if(currentRank == Rank.SUPERVISOR.toString()){
-            this.problemSolvingSkills = (random.nextInt(97) + 92);
+            this.problemSolvingSkills = generateRandomNumber(93, 98);
         }
         else if(currentRank == Rank.MANAGER.toString()){
             this.problemSolvingSkills = 100;
         }
+    }
+
+    public int getProblemSolvingSkills() {
+        return problemSolvingSkills;
+    }
+
+    public static int generateRandomNumber (int min, int max) {
+        Random random = new Random();
+        return random.nextInt((max - min) + 1) + min;
     }
 
     /** METHODS */

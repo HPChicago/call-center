@@ -13,7 +13,7 @@ public class CallCenter {
 
     private int numberOfCalls;
     private int numberOfRepresentatives;
-    private List<Representative>repsOnDuty;
+    private List<Representative> repsOnDuty;
     private ConcurrentLinkedDeque<Call> receivedCalls;
 
     /** CONSTRUCTORS */
@@ -27,12 +27,10 @@ public class CallCenter {
 
     /** GETTERS & SETTERS */
 
-    public List<Representative>repsOnDuty(int numberOfRepresentatives){
+    public List<Representative> repsOnDuty(int numberOfRepresentatives){
         List<Representative> representatives = new ArrayList<>();
-        Representative employee1 = new Representative(Representative.Rank.EMPLOYEE, 3);
-        representatives.add(employee1);
-        for(int r = 1; r < numberOfRepresentatives; r++){
-            Representative employee = new Representative(Representative.Rank.EMPLOYEE, r + 3);
+        for(int r = 1; r <= numberOfRepresentatives; r++){
+            Representative employee = new Representative(Representative.Rank.EMPLOYEE, r + 2);
             representatives.add(employee);
         }
         Representative supervisor = new Representative(Representative.Rank.SUPERVISOR, 2);
@@ -59,7 +57,10 @@ public class CallCenter {
 
     public void processCalls() {
         CallHandler callHandler = new CallHandler(receivedCalls, repsOnDuty);
-        new Thread(callHandler).start();
+        Thread t1 = new Thread(callHandler);
+        t1.setDaemon(false);
+        t1.start();
+        //new Thread(callHandler).start();
 
     }
 }

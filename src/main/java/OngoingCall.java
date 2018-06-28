@@ -27,6 +27,7 @@ class OngoingCall extends CallHandler implements Runnable{
         this.representative = representative;
         this.call = call;
         this.setLengthOfTheCall();
+
     }
 
     /** SETTERS */
@@ -84,19 +85,36 @@ class OngoingCall extends CallHandler implements Runnable{
             Thread.sleep(callLength);
             logger.info(representative.getCurrentRank() + " ID: " + representative.getEmployeeId() + " hanging up after call# " + call.getCallId());
             representative.setFree();
-            //call.setHandled(true);
-            if(call.isHandled()){
-                System.out.println("if 2 " + call.getCallId() + " < callId - handled? > " +  call.isHandled());
+            System.out.println("Representative " + representative.getEmployeeId() + " is free to pick up other calls");
+            call.setHandled(didRepresentativeHandleTheCall(representative));
+            System.out.println("Call Id: " + call.getCallId() + " resolved: < " + didRepresentativeHandleTheCall(representative) + " >");
+            synchronized (key){
+                if(call.isHandled())
+                {
+                    System.out.println("Call Id: " + call.getCallId() + " Problem Solved: > " +  call.isHandled());
+                    //this.receivedCalls.pollFirst();
+                }
+                else{
+                    System.out.println("Call Id: " + call.getCallId() + " Problem Solved: < " +  call.isHandled() + " >");
+                    call.elevateCallLevel();
+                    System.out.println("Call Id: " + call.getCallId() + " current call level: " + call.getCallLevel());
+                    System.out.println("Call Id: " + call.getCallId() + " is elevated to level: " + call.callElevatedTo());
+                    receivedCalls.addFirst(call);
+                }
             }
-            else{
-                System.out.println("Call Id: " + call.getCallId() + " Problem Solved: < " +  call.isHandled() + " >");
-                call.elevateCallLevel();
-                System.out.println("Call Id: " + call.getCallId() + " current call level: " + call.getCallLevel());
-                System.out.println("Call Id: " + call.getCallId() + " is elevated to level: " + call.callElevatedTo());
-                receivedCalls.addFirst(call);
-            }
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    public boolean didRepresentativeHandleTheCall(Representative representative){
+            int currentCallProblemSolvingSkills =  generateRandomNumber(30,100);
+            if (currentCallProblemSolvingSkills <= representative.getProblemSolvingSkills()){
+                return true;
+            }
+            else{
+                return false;
+            }
+    }
+
+
 }
