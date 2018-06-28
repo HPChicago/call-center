@@ -7,7 +7,7 @@ public class Main {
          *Example: numberOfRepresentatives = 2; meaning 2 EMPLOYEES, 1 SUPERVISOR, and 1 MANAGER can handle the calls
          */
 
-        CallCenter callCenter = new CallCenter(15,3);
+        CallCenter callCenter = new CallCenter(14,4);
         callCenter.processCalls();
     }
 }

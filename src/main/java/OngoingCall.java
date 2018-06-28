@@ -1,14 +1,16 @@
 /**
  * OngoingCall Class controls flow of the current call.
+ *
  * @author Gregory Povorozniuk
  */
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-class OngoingCall extends CallHandler implements Runnable{
+class OngoingCall extends CallHandler implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(OngoingCall.class);
 
@@ -32,15 +34,15 @@ class OngoingCall extends CallHandler implements Runnable{
 
     /** SETTERS */
 
-    private void setLengthOfTheCall(){
+    private void setLengthOfTheCall() {
         Random rand = new Random();
-        switch (call.getCallComplexity()){
+        switch (call.getCallComplexity()) {
             case 1:
-                this.callLength = rand.nextInt(MINUTE/3 + 10000);
+                this.callLength = rand.nextInt(MINUTE / 3 + 10000);
                 logger.info("Expected length of a call Id: " + call.getCallId() + " is: " + getExpectedLengthOfTheCall(callLength));
                 break;
             case 2:
-                this.callLength = rand.nextInt(MINUTE/2 + 10000);
+                this.callLength = rand.nextInt(MINUTE / 2 + 10000);
                 logger.info("Expected length of a call Id: " + call.getCallId() + " is: " + getExpectedLengthOfTheCall(callLength));
                 break;
             case 3:
@@ -48,11 +50,11 @@ class OngoingCall extends CallHandler implements Runnable{
                 logger.info("Expected length of a call Id: " + call.getCallId() + " is: " + getExpectedLengthOfTheCall(callLength));
                 break;
             case 5:
-                this.callLength = rand.nextInt(MINUTE*2 + 10000);
+                this.callLength = rand.nextInt(MINUTE * 2 + 10000);
                 logger.info("Expected length of a call Id: " + call.getCallId() + " is: " + getExpectedLengthOfTheCall(callLength));
                 break;
             case 8:
-                this.callLength = rand.nextInt(MINUTE*3 + 10000);
+                this.callLength = rand.nextInt(MINUTE * 3 + 10000);
                 logger.info("Expected length of a call Id: " + call.getCallId() + " is: " + getExpectedLengthOfTheCall(callLength));
                 break;
             default:
@@ -63,15 +65,13 @@ class OngoingCall extends CallHandler implements Runnable{
 
     /** METHODS */
 
-    public String getExpectedLengthOfTheCall(int ms){
-        int time = ms/60000;
-        if (time == 0){
+    public String getExpectedLengthOfTheCall(int ms) {
+        int time = ms / 60000;
+        if (time == 0) {
             return "less than a minute";
-        }
-        else if(time == 1){
+        } else if (time == 1) {
             return "1 minute";
-        }
-        else{
+        } else {
             String mn = String.valueOf(time);
             return mn + " minutes";
         }
@@ -80,40 +80,34 @@ class OngoingCall extends CallHandler implements Runnable{
     @Override
     public void run() {
         try {
-            System.out.println("Call Id: " + call.getCallId() + " current call level: " + call.getCallLevel());
-            logger.info(representative.getCurrentRank() + " ID: " + representative.getEmployeeId()  +" is picking up call# " + call.getCallId());
-            Thread.sleep(callLength);
+            logger.info("Call Id: " + call.getCallId() + " current call level: " + call.getCallLevel());
+            logger.info(representative.getCurrentRank() + " ID: " + representative.getEmployeeId() + " is picking up call# " + call.getCallId());
+            Thread.sleep(callLength/2);
             logger.info(representative.getCurrentRank() + " ID: " + representative.getEmployeeId() + " hanging up after call# " + call.getCallId());
             representative.setFree();
-            System.out.println("Representative " + representative.getEmployeeId() + " is free to pick up other calls");
+            logger.info(representative.getCurrentRank()+ " ID: " + representative.getEmployeeId() + " is free to pick up other calls");
             call.setHandled(didRepresentativeHandleTheCall(representative));
-            System.out.println("Call Id: " + call.getCallId() + " resolved: < " + didRepresentativeHandleTheCall(representative) + " >");
-            synchronized (key){
-                if(call.isHandled())
-                {
-                    System.out.println("Call Id: " + call.getCallId() + " Problem Solved: > " +  call.isHandled());
-                    //this.receivedCalls.pollFirst();
-                }
-                else{
-                    System.out.println("Call Id: " + call.getCallId() + " Problem Solved: < " +  call.isHandled() + " >");
+                if (call.isHandled()) {
+                    logger.info("Call Id: " + call.getCallId() + " Problem Solved: > " + call.isHandled());
+                } else {
+                    logger.info("Call Id: " + call.getCallId() + " Problem Solved: < " + call.isHandled() + " >");
                     call.elevateCallLevel();
-                    System.out.println("Call Id: " + call.getCallId() + " current call level: " + call.getCallLevel());
-                    System.out.println("Call Id: " + call.getCallId() + " is elevated to level: " + call.callElevatedTo());
+                    logger.info("Call Id: " + call.getCallId() + " current call level: " + call.getCallLevel());
+                    logger.info("Call Id: " + call.getCallId() + " is elevated to level: " + call.callElevatedTo());
                     receivedCalls.addFirst(call);
                 }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    public boolean didRepresentativeHandleTheCall(Representative representative){
-            int currentCallProblemSolvingSkills =  generateRandomNumber(30,100);
-            if (currentCallProblemSolvingSkills <= representative.getProblemSolvingSkills()){
-                return true;
-            }
-            else{
-                return false;
-            }
+
+    public boolean didRepresentativeHandleTheCall(Representative representative) {
+        int currentCallProblemSolvingSkills = generateRandomNumber(30, 100);
+        if (currentCallProblemSolvingSkills <= representative.getProblemSolvingSkills()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
