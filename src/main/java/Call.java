@@ -35,7 +35,11 @@ public class Call {
         this.callComplexity = fibonacciSequence.get(index);
     }
 
-    private void setCallId(){
+    public void setCallComplexity(int callComplexity) {
+        this.callComplexity = callComplexity;
+    }
+
+        private void setCallId(){
         Random rand = new Random();
         this.callId = String.valueOf(rand.nextInt(99999) + 1111);
     }

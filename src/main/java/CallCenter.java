@@ -11,20 +11,17 @@ public class CallCenter {
 
     /** FIELDS */
 
-//    private int numberOfCalls;
-//    private int numberOfRepresentatives;
     private List<Representative> repsOnDuty;
     private ConcurrentLinkedDeque<Call> receivedCalls;
 
     /** CONSTRUCTORS */
 
-    public CallCenter(int numberOfCalls, int numberOfRepresentatives) {
-//        this.numberOfCalls = numberOfCalls;
-//        this.numberOfRepresentatives = numberOfRepresentatives;
-        this.repsOnDuty(numberOfRepresentatives);
-        //this.receivedCalls(numberOfCalls);
+    public CallCenter(int numberOfCalls, int numberOfEmployees) {
+        this.setNumberOfEmployeesOnDuty(numberOfEmployees);
         this.setNumberOfCalls(numberOfCalls);
     }
+
+    public CallCenter(){};
 
     public void setNumberOfCalls(int numberOfCalls) {
         if(numberOfCalls < 1){
@@ -33,9 +30,14 @@ public class CallCenter {
         receivedCalls(numberOfCalls);
     }
 
+    public void setNumberOfEmployeesOnDuty(int numberOfEmployeesOnDuty){
+        if(numberOfEmployeesOnDuty < 1){
+            throw new IllegalArgumentException("Need to hire at least 1 employee. Supervisor and a manager won't hold the fort down for too long...");
+        }
+        this.repsOnDuty(numberOfEmployeesOnDuty);
+    }
+
     /** GETTERS & SETTERS */
-
-
 
     public List<Representative> repsOnDuty(int numberOfRepresentatives){
         List<Representative> representatives = new ArrayList<>();
@@ -70,7 +72,6 @@ public class CallCenter {
         Thread t1 = new Thread(callHandler);
         t1.setDaemon(false);
         t1.start();
-        //new Thread(callHandler).start();
 
     }
 }

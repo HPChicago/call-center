@@ -8,6 +8,7 @@ public class Representative {
     private int employeeId;
     private String currentRank;
     private int problemSolvingSkills;
+    private int countOfHandledCalls;
 
     /** CONSTRUCTORS */
 
@@ -34,6 +35,10 @@ public class Representative {
         this.isAvailable = canHandle;
     }
 
+    public int getCountOfHandledCalls() { return countOfHandledCalls; }
+
+    public void increaseCountOfHandledCalls() { this.countOfHandledCalls = countOfHandledCalls + 1; }
+
     public void setProblemSolvingSklls(String rank){
         if(currentRank == Rank.EMPLOYEE.toString()){
             this.problemSolvingSkills = generateRandomNumber(85, 95);
@@ -44,6 +49,9 @@ public class Representative {
         else if(currentRank == Rank.MANAGER.toString()){
             this.problemSolvingSkills = 100;
         }
+    }
+    public void setProblemSolvingSklls(int problemSolvingSkills) {
+        this.problemSolvingSkills = problemSolvingSkills;
     }
 
     public int getProblemSolvingSkills() {

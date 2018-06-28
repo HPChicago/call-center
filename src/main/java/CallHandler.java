@@ -31,6 +31,10 @@ public class CallHandler implements Runnable {
     public CallHandler() {
     }
 
+    public List<Representative> getRepsOnDuty() {
+        return repsOnDuty;
+    }
+
     /**
      * METHODS
      */
@@ -90,7 +94,7 @@ public class CallHandler implements Runnable {
         if (availableEmployees.size() != repsOnDuty.size()) {
             Thread.sleep(10000);
             if (receivedCalls.size() != 0) {
-                System.out.println("Calls in the queue: " + receivedCalls.size() + "...");
+                logger.info("Calls in the queue: " + receivedCalls.size() + "...");
                 findCallHandler();
             } else {
                 for (int i = 0; i < arrThreads.size(); i++) {

@@ -37,6 +37,8 @@ class OngoingCall extends CallHandler implements Runnable {
     private void setLengthOfTheCall() {
         Random rand = new Random();
         switch (call.getCallComplexity()) {
+            case 0:
+                this.callLength = 0; //for testing purposes
             case 1:
                 this.callLength = rand.nextInt(MINUTE / 3 + 10000);
                 logger.info("Expected length of a call Id: " + call.getCallId() + " is: " + getExpectedLengthOfTheCall(callLength));
@@ -82,12 +84,13 @@ class OngoingCall extends CallHandler implements Runnable {
         try {
             logger.info("Call Id: " + call.getCallId() + " current call level: " + call.getCallLevel());
             logger.info(representative.getCurrentRank() + " ID: " + representative.getEmployeeId() + " is picking up call# " + call.getCallId());
-            Thread.sleep(callLength/2);
+            Thread.sleep(callLength/2); //decided to divide wait in 2 to save time
             logger.info(representative.getCurrentRank() + " ID: " + representative.getEmployeeId() + " hanging up after call# " + call.getCallId());
             representative.setFree();
             logger.info(representative.getCurrentRank()+ " ID: " + representative.getEmployeeId() + " is free to pick up other calls");
             call.setHandled(didRepresentativeHandleTheCall(representative));
                 if (call.isHandled()) {
+                    representative.increaseCountOfHandledCalls();
                     logger.info("Call Id: " + call.getCallId() + " Problem Solved: > " + call.isHandled());
                 } else {
                     logger.info("Call Id: " + call.getCallId() + " Problem Solved: < " + call.isHandled() + " >");
